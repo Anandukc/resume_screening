@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload MRI — Brain Tumor Detection</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-brain"></i> Brain-Tumor-AI
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+            <a href="/upload" class="active"><i class="fa-solid fa-microscope"></i> <span>Diagnose</span></a>
+            <a href="/reports"><i class="fa-solid fa-file-medical"></i> <span>Reports</span></a>
+            <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2><i class="fa-solid fa-microscope"></i> New Diagnosis</h2>
+        <p>Fill in patient details and upload an MRI scan for AI analysis.</p>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="upload-wrapper">
+                <form method="post" action="/predict" enctype="multipart/form-data" class="upload-form" id="diagnosisForm">
+                    <div class="form-group">
+                        <label for="patient_name"><i class="fa-solid fa-user"></i> Patient Name</label>
+                        <input type="text" id="patient_name" name="patient_name" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age"><i class="fa-solid fa-calendar-days"></i> Age</label>
+                            <input type="number" id="age" name="age" min="1" max="120" placeholder="Patient age" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender"><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                            <select id="gender" name="gender">
+                                <option value="Not specified">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Drag & Drop style file upload -->
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-image"></i> MRI Image</label>
+                        <div class="file-upload-area" id="dropArea" onclick="document.getElementById('mri_image').click()">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <p>Click to upload or drag &amp; drop</p>
+                            <span class="file-types">Supports: JPG, PNG, DICOM</span>
+                            <input type="file" id="mri_image" name="mri_image" accept="image/*" required onchange="previewImage(event)">
+                        </div>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div id="preview-container" class="preview-container" style="display:none;">
+                        <p><i class="fa-solid fa-eye"></i> Image Preview</p>
+                        <img id="image-preview" src="" alt="MRI Preview">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i> Run AI Diagnosis
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing MRI scan...</div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 AI Brain Tumor Detection System</p>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosis Result — Brain Tumor Detection</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-brain"></i> Brain-Tumor-AI
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+            <a href="/upload"><i class="fa-solid fa-microscope"></i> <span>Diagnose</span></a>
+            <a href="/reports"><i class="fa-solid fa-file-medical"></i> <span>Reports</span></a>
+            <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2><i class="fa-solid fa-stethoscope"></i> Diagnosis Result</h2>
+        <p>AI analysis complete — review the findings below.</p>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="result-wrapper">
+                <!-- Image Comparison -->
+                <div class="result-images-compare">
+                    <div class="result-image">
+                        <img src="{{ image_path }}" alt="Uploaded MRI">
+                        <p class="result-image-label"><i class="fa-solid fa-image"></i> Original MRI Scan</p>
+                    </div>
+                    <div class="result-image">
+                        <img src="{{ detection_path }}" alt="Detection Result">
+                        <p class="result-image-label"><i class="fa-solid fa-crosshairs"></i> Detection Output</p>
+                    </div>
+                </div>
+
+                <!-- Result Card -->
+                <div class="result-details">
+                    <div class="result-card {% if result == 'Positive' %}result-positive{% else %}result-negative{% endif %}">
+                        <h3>
+                            {% if result == 'Positive' %}
+                                <i class="fa-solid fa-triangle-exclamation"></i> Tumor Detected
+                            {% else %}
+                                <i class="fa-solid fa-circle-check"></i> No Tumor Detected
+                            {% endif %}
+                        </h3>
+
+                        <table class="result-table">
+                            <tr>
+                                <td><i class="fa-solid fa-user"></i> Patient Name</td>
+                                <td>{{ patient_name }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-calendar"></i> Age</td>
+                                <td>{{ age }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-venus-mars"></i> Gender</td>
+                                <td>{{ gender }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa-solid fa-clipboard-check"></i> Diagnosis</td>
+                                <td><strong>{{ result }}</strong></td>
+                            </tr>
+                        </table>
+
+                        <!-- Confidence Bar -->
+                        <div class="confidence-bar-wrapper">
+                            <div class="confidence-bar-label">
+                                <span>Confidence Score</span>
+                                <span>{{ "%.0f"|format(confidence * 100) }}%</span>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-bar-fill" style="width: {{ "%.0f"|format(confidence * 100) }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-actions">
+                        <a href="/upload" class="btn btn-primary">
+                            <i class="fa-solid fa-plus"></i> New Diagnosis
+                        </a>
+                        <a href="/download-report/{{ patient_id }}" class="btn btn-primary" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                            <i class="fa-solid fa-file-pdf"></i> Download PDF
+                        </a>
+                        <a href="/reports" class="btn btn-outline">
+                            <i class="fa-solid fa-clipboard-list"></i> View Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 AI Brain Tumor Detection System</p>
+    </footer>
+</body>
+</html>

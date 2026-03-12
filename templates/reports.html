@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Reports — Brain Tumor Detection</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-brain"></i> Brain-Tumor-AI
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+            <a href="/upload"><i class="fa-solid fa-microscope"></i> <span>Diagnose</span></a>
+            <a href="/reports" class="active"><i class="fa-solid fa-file-medical"></i> <span>Reports</span></a>
+            <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2><i class="fa-solid fa-clipboard-list"></i> Patient Reports</h2>
+        <p>View and manage all past diagnosis records.</p>
+    </div>
+
+    <section class="section">
+        <div class="container">
+
+            <!-- Controls -->
+            <div class="report-controls">
+                <input type="text" id="searchInput" placeholder="Search patient name..." onkeyup="filterTable()">
+
+                <select id="filterSelect" onchange="filterTable()">
+                    <option value="all">All Results</option>
+                    <option value="Positive">Positive Only</option>
+                    <option value="Negative">Negative Only</option>
+                </select>
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table class="data-table" id="reportsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th><i class="fa-solid fa-user"></i> Patient Name</th>
+                            <th><i class="fa-solid fa-calendar"></i> Age</th>
+                            <th><i class="fa-solid fa-clock"></i> Date</th>
+                            <th><i class="fa-solid fa-stethoscope"></i> Diagnosis</th>
+                            <th><i class="fa-solid fa-chart-simple"></i> Confidence</th>
+                            <th><i class="fa-solid fa-image"></i> Detection</th>
+                            <th><i class="fa-solid fa-file-pdf"></i> Report</th>
+                            <th><i class="fa-solid fa-trash"></i> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in patients %}
+                        <tr data-result="{{ p.result }}">
+                            <td>{{ loop.index }}</td>
+                            <td><strong>{{ p.patient_name }}</strong></td>
+                            <td>{{ p.age }}</td>
+                            <td>{{ p.date }}</td>
+                            <td>
+                                <span class="badge {% if p.result == 'Positive' %}badge-red{% else %}badge-green{% endif %}">
+                                    {% if p.result == 'Positive' %}
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    {% endif %}
+                                    {{ p.result }}
+                                </span>
+                            </td>
+                            <td>{{ p.confidence }}</td>
+                            <td>
+                                {% if p.detection_image %}
+                                    <img src="/static/detections/{{ p.detection_image }}" alt="Detection" class="table-thumbnail">
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="/download-report/{{ p.id }}" class="btn btn-sm btn-pdf" title="Download PDF">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/delete-patient/{{ p.id }}" class="btn btn-sm btn-delete" title="Delete Record" onclick="return confirm('Delete this patient record?')">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% if patients | length == 0 %}
+                        <tr>
+                            <td colspan="9" class="empty-msg">
+                                <i class="fa-solid fa-folder-open"></i> No records found. Run a diagnosis first.
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 AI Brain Tumor Detection System</p>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

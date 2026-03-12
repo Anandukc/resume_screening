@@ -1,0 +1,9 @@
+ultralytics
+fastapi
+uvicorn
+python-multipart
+jinja2
+itsdangerous
+aiofiles
+fpdf2
+mysql-connector-python

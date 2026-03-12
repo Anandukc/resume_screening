@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Brain Tumor Detection</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fa-solid fa-brain"></i> Brain-Tumor-AI
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard" class="active"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></a>
+            <a href="/upload"><i class="fa-solid fa-microscope"></i> <span>Diagnose</span></a>
+            <a href="/reports"><i class="fa-solid fa-file-medical"></i> <span>Reports</span></a>
+            <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2><i class="fa-solid fa-gauge-high"></i> Dashboard</h2>
+        <p>Welcome back! Here's your workspace overview.</p>
+    </div>
+
+    <section class="section">
+        <div class="container">
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-card-icon blue"><i class="fa-solid fa-brain"></i></div>
+                    <div class="stat-card-info">
+                        <h4>YOLOv8</h4>
+                        <p>AI Model</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon teal"><i class="fa-solid fa-clipboard-list"></i></div>
+                    <div class="stat-card-info">
+                        <h4>{{ stats.total }}</h4>
+                        <p>Total Scans</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="stat-card-info">
+                        <h4>{{ stats.positive }}</h4>
+                        <p>Tumor Detected</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-card-info">
+                        <h4>{{ stats.negative }}</h4>
+                        <p>No Tumor</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Chart -->
+            <div class="chart-container animate-fade-up">
+                <h3 class="chart-title"><i class="fa-solid fa-chart-pie"></i> Detection Statistics</h3>
+                <div class="chart-wrapper">
+                    <canvas id="statsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Action Cards -->
+            <div class="section-header" style="margin-top: 1rem;">
+                <div class="section-label"><i class="fa-solid fa-rocket"></i> Quick Actions</div>
+                <h2 class="section-title">What would you like to do?</h2>
+            </div>
+
+            <div class="card-grid three-col">
+                <!-- New Diagnosis -->
+                <a href="/upload" class="card dashboard-card animate-fade-up">
+                    <div class="card-icon">🩻</div>
+                    <h3>New Diagnosis</h3>
+                    <p>Upload an MRI scan and run AI-powered tumor detection analysis.</p>
+                    <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </a>
+
+                <!-- Patient Reports -->
+                <a href="/reports" class="card dashboard-card animate-fade-up-delay">
+                    <div class="card-icon">📋</div>
+                    <h3>Patient Reports</h3>
+                    <p>View, search, and download past diagnosis records and history.</p>
+                    <div class="card-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </a>
+
+                <!-- Model Information -->
+                <div class="card dashboard-card animate-fade-up-delay2">
+                    <div class="card-icon">🧬</div>
+                    <h3>Model Information</h3>
+                    <p>
+                        <strong>Model:</strong> YOLOv8<br>
+                        <strong>Task:</strong> Object Detection<br>
+                        <strong>Framework:</strong> Ultralytics / PyTorch
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 AI Brain Tumor Detection System</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('statsChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tumor Detected', 'No Tumor'],
+                    datasets: [{
+                        data: [{{ stats.positive }}, {{ stats.negative }}],
+                        backgroundColor: ['#e74c3c', '#2ecc71'],
+                        borderColor: ['#c0392b', '#27ae60'],
+                        borderWidth: 2,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { family: 'Inter', size: 13 }, padding: 20, usePointStyle: true }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
